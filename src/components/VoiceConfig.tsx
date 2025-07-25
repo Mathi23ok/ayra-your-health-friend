@@ -6,21 +6,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Key, Volume2 } from "lucide-react";
 
 interface VoiceConfigProps {
-  onApiKeySet: (apiKey: string) => void;
-  hasApiKey: boolean;
+  onApiKeySet?: (apiKey: string) => void;
+  hasApiKey?: boolean;
+  apiKey?: string;
+  onApiKeyChange?: (key: string) => void;
 }
 
-export const VoiceConfig = ({ onApiKeySet, hasApiKey }: VoiceConfigProps) => {
-  const [apiKey, setApiKey] = useState("");
+export const VoiceConfig = ({ onApiKeySet, hasApiKey, apiKey: externalApiKey, onApiKeyChange }: VoiceConfigProps) => {
+  const [apiKey, setApiKey] = useState(externalApiKey || "");
+  
+  const handleApiKeyChange = (value: string) => {
+    setApiKey(value);
+    onApiKeyChange?.(value);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (apiKey.trim()) {
-      onApiKeySet(apiKey.trim());
+      onApiKeySet?.(apiKey.trim());
     }
   };
 
-  if (hasApiKey) {
+  if (hasApiKey || (apiKey && !onApiKeySet)) {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Volume2 className="w-4 h-4 text-green-500" />
@@ -57,7 +64,7 @@ export const VoiceConfig = ({ onApiKeySet, hasApiKey }: VoiceConfigProps) => {
               type="password"
               placeholder="Enter your ElevenLabs API key..."
               value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
+              onChange={(e) => handleApiKeyChange(e.target.value)}
               className="border-yellow-300 focus:border-secondary"
             />
           </div>

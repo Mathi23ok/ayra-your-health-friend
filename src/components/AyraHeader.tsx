@@ -1,9 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { Heart, Menu } from "lucide-react";
 import { useState } from "react";
+import { Menu, X, Heart, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { EmergencyContacts } from "@/components/EmergencyContacts";
+import { AyraChat } from "@/components/AyraChat";
 
 export const AyraHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -54,9 +58,19 @@ export const AyraHeader = () => {
             >
               Contact
             </button>
-            <Button variant="ayra" size="sm">
-              Talk to Ayra
-            </Button>
+            <div className="flex items-center gap-2">
+              <EmergencyContacts />
+              <Button 
+                variant="ayra" 
+                size="sm"
+                className="ayra-shadow-soft hover:ayra-shadow-warm ayra-transition"
+                onClick={() => setIsChatOpen(true)}
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Talk to Ayra
+              </Button>
+              <ThemeToggle />
+            </div>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -98,13 +112,25 @@ export const AyraHeader = () => {
               >
                 Contact
               </button>
-              <Button variant="ayra" size="sm" className="w-fit">
+              <div className="flex justify-between items-center">
+                <EmergencyContacts />
+                <ThemeToggle />
+              </div>
+              <Button 
+                variant="ayra" 
+                size="sm" 
+                className="w-full ayra-shadow-soft hover:ayra-shadow-warm ayra-transition"
+                onClick={() => setIsChatOpen(true)}
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
                 Talk to Ayra
               </Button>
             </div>
           </nav>
         )}
       </div>
+      
+      <AyraChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </header>
   );
 };
