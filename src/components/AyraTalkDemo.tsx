@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mic, MicOff, MessageSquare } from "lucide-react";
+import { Mic, MicOff, MessageSquare, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { VoiceConfig } from "@/components/VoiceConfig";
+import { useAyraVoice } from "@/hooks/useAyraVoice";
 
 const sampleQuestions = [
   {
@@ -21,10 +23,35 @@ const sampleQuestions = [
 export const AyraTalkDemo = () => {
   const [activeDemo, setActiveDemo] = useState<number | null>(null);
   const [isListening, setIsListening] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+  const { speak, stopSpeaking, isLoading, isPlaying } = useAyraVoice();
+
+  const voiceSettings = {
+    apiKey,
+    voiceId: "EXAVITQu4vr4xnSDxMaL", // Sarah's voice - warm and caring
+    model: "eleven_multilingual_v2"
+  };
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);
-    // In a real implementation, this would start/stop voice recognition
+    if (isListening && isPlaying) {
+      stopSpeaking();
+    }
+  };
+
+  const handleDemoClick = async (index: number) => {
+    const wasActive = activeDemo === index;
+    setActiveDemo(wasActive ? null : index);
+    
+    // If we have an API key and we're opening a new demo, speak the response
+    if (!wasActive && apiKey && sampleQuestions[index]) {
+      // Add a small delay to let the UI update first
+      setTimeout(() => {
+        speak(sampleQuestions[index].response, voiceSettings);
+      }, 300);
+    } else if (wasActive && isPlaying) {
+      stopSpeaking();
+    }
   };
 
   return (
@@ -38,7 +65,14 @@ export const AyraTalkDemo = () => {
             Experience how natural and caring conversations with Ayra feel. Click on any example below.
           </p>
         </div>
-
+        
+        {/* Voice Configuration */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <VoiceConfig 
+            onApiKeySet={setApiKey} 
+            hasApiKey={!!apiKey} 
+          />
+        </div>
         {/* Voice Interface */}
         <div className="max-w-2xl mx-auto mb-16">
           <Card className="ayra-shadow-warm border-primary/30">
@@ -97,7 +131,7 @@ export const AyraTalkDemo = () => {
                   className={`cursor-pointer ayra-transition hover:ayra-shadow-soft border-primary/20 ${
                     activeDemo === index ? 'ayra-shadow-warm border-secondary' : ''
                   }`}
-                  onClick={() => setActiveDemo(activeDemo === index ? null : index)}
+                  onClick={() => handleDemoClick(index)}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4">
@@ -109,8 +143,28 @@ export const AyraTalkDemo = () => {
                           "{item.question}"
                         </p>
                       </div>
-                      <div className="text-muted-foreground text-sm">
-                        Click to see response
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        {apiKey ? (
+                          <>
+                            {isLoading && activeDemo === index ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : isPlaying && activeDemo === index ? (
+                              <Volume2 className="w-4 h-4 text-green-500" />
+                            ) : (
+                              <VolumeX className="w-4 h-4" />
+                            )}
+                            <span>
+                              {isLoading && activeDemo === index 
+                                ? "Loading..." 
+                                : isPlaying && activeDemo === index 
+                                ? "Ayra is speaking..." 
+                                : "Click to hear Ayra"
+                              }
+                            </span>
+                          </>
+                        ) : (
+                          <span>Click to see response</span>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -119,17 +173,30 @@ export const AyraTalkDemo = () => {
                 {activeDemo === index && (
                   <Card className="ayra-gradient-primary animate-fade-in-up">
                     <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full ayra-gradient-accent flex items-center justify-center flex-shrink-0">
-                          <div className="w-6 h-6 rounded-full bg-foreground"></div>
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full ayra-gradient-accent flex items-center justify-center flex-shrink-0">
+                            <div className="w-6 h-6 rounded-full bg-foreground"></div>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-sm text-foreground/80">Ayra responds:</span>
+                              {apiKey && (
+                                <div className="flex items-center gap-1">
+                                  {isLoading && activeDemo === index ? (
+                                    <Loader2 className="w-4 h-4 animate-spin text-secondary" />
+                                  ) : isPlaying && activeDemo === index ? (
+                                    <Volume2 className="w-4 h-4 text-green-500" />
+                                  ) : (
+                                    <VolumeX className="w-4 h-4 text-muted-foreground" />
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-foreground leading-relaxed">
+                              {item.response}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-sm text-foreground/80 mb-2">Ayra responds:</div>
-                          <p className="text-foreground leading-relaxed">
-                            {item.response}
-                          </p>
-                        </div>
-                      </div>
                     </CardContent>
                   </Card>
                 )}
@@ -143,6 +210,11 @@ export const AyraTalkDemo = () => {
             These are just examples. Ayra can help with a wide range of health concerns, 
             from symptom analysis to appointment scheduling and everything in between.
           </p>
+          {apiKey && (
+            <p className="text-xs text-muted-foreground/70 mt-2">
+              🎙️ Voice powered by ElevenLabs using Sarah's caring voice
+            </p>
+          )}
         </div>
       </div>
     </section>
