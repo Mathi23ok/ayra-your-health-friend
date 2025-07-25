@@ -8,44 +8,44 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Ayra's warm and loving color palette */
-    --background: 45 100% 99%; /* Creamy white */
-    --foreground: 0 0% 20%; /* Charcoal gray */
+    /* Ayra's bold and vibrant color palette */
+    --background: 220 25% 8%; /* Deep dark blue */
+    --foreground: 210 40% 98%; /* Light text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card: 220 25% 12%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
+    --popover: 220 25% 12%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 240 67% 94%; /* Lavender */
-    --primary-foreground: 0 0% 20%;
+    --primary: 240 100% 65%; /* Vibrant purple */
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 351 100% 86%; /* Blush pink */
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 320 100% 60%; /* Bright magenta */
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 45 100% 97%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 220 25% 15%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 180 100% 90%; /* Soft teal */
-    --accent-foreground: 0 0% 20%;
+    --accent: 180 100% 55%; /* Electric teal */
+    --accent-foreground: 220 25% 8%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 67% 90%;
-    --input: 240 67% 95%;
-    --ring: 240 67% 80%;
+    --border: 220 25% 20%;
+    --input: 220 25% 15%;
+    --ring: 240 100% 65%;
 
     /* Custom Ayra gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(240 67% 94%), hsl(351 100% 86%));
-    --gradient-soft: linear-gradient(180deg, hsl(45 100% 99%), hsl(240 67% 97%));
-    --gradient-accent: linear-gradient(135deg, hsl(180 100% 90%), hsl(240 67% 94%));
+    --gradient-primary: linear-gradient(135deg, hsl(240 100% 65%), hsl(320 100% 60%));
+    --gradient-soft: linear-gradient(180deg, hsl(220 25% 8%), hsl(220 25% 12%));
+    --gradient-accent: linear-gradient(135deg, hsl(180 100% 55%), hsl(240 100% 65%));
     
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(240 67% 85% / 0.3);
-    --shadow-warm: 0 8px 30px -8px hsl(351 100% 86% / 0.4);
-    --shadow-glow: 0 0 30px hsl(240 67% 94% / 0.5);
+    --shadow-soft: 0 4px 20px -4px hsl(240 100% 65% / 0.4);
+    --shadow-warm: 0 8px 30px -8px hsl(320 100% 60% / 0.5);
+    --shadow-glow: 0 0 30px hsl(240 100% 65% / 0.6);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
