@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Heart, Mic, Phone } from "lucide-react";
+import { AyraFullPageChat } from "@/components/AyraFullPageChat";
 import ayraHeroImage from "@/assets/ayra-hero.jpg";
+import { useState } from "react";
 
 export const AyraHero = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  
   return (
+    <>
+      <AyraFullPageChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     <section className="min-h-screen flex items-center justify-center ayra-gradient-soft relative overflow-hidden">
       <div className="container mx-auto px-6 py-20 text-center relative z-10">
         <div className="animate-fade-in-up">
@@ -29,12 +35,22 @@ export const AyraHero = () => {
           </div>
 
           <div className="relative max-w-4xl mx-auto">
-            <div className="ayra-shadow-glow rounded-3xl overflow-hidden ayra-float">
-              <img 
-                src={ayraHeroImage} 
-                alt="Ayra - Your caring AI health assistant" 
-                className="w-full h-auto"
-              />
+            <div 
+              className="ayra-shadow-glow rounded-3xl overflow-hidden ayra-float cursor-pointer transition-transform duration-300 hover:scale-105 group"
+              onClick={() => setIsChatOpen(true)}
+            >
+              <div className="relative">
+                <img 
+                  src={ayraHeroImage} 
+                  alt="Ayra - Your caring AI health assistant" 
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="bg-background/90 rounded-full p-4 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                    <Mic className="w-8 h-8 text-primary" />
+                  </div>
+                </div>
+              </div>
             </div>
             
             {/* Floating elements */}
@@ -57,5 +73,6 @@ export const AyraHero = () => {
       <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
       <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-secondary/20 blur-2xl"></div>
     </section>
+    </>
   );
 };
